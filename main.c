@@ -21,27 +21,31 @@ void printwords(char *arraywords, char searchstring[]);
 
     int main(void)
     {
-        char**      array    = NULL;    /* Array of read lines */
-        int         line_count;         // Total number of read lines
-// Prompt the user for the name of a text file
+        char**      array    = NULL;    /* Array of  words */
+        int         word_count;         // Total number words
 
+        // 1. Prompt the user for the name of a text file
         FILE* inputFileName;
-        inputFileName=inputFile();
+        inputFileName=inputFile(); // call the function which will prompt for the text file
 
-        /* Read lines from file. */
-        array = read_strings(inputFileName, &line_count);
+        // 2. Read lines from file.
+        array = read_strings(inputFileName, &word_count);
 
-        for (int i = 0; i < line_count; i++) {
+        // 3. Loop through the array and find the elements ending in "ed"
+        for (int i = 0; i < word_count; i++) {
+
+        // 4. Display on screen a list of strings that end in "ed"
 
              printwords(array[i], "ed");
+
         }
+
         /* Cleanup. */
         fclose(inputFileName);
-        for (int i = 0; i < line_count; i++) {
+        for (int i = 0; i < word_count; i++) {
             free(array[i]);
         }
         free(array);
-
 
         return 0;
     }
@@ -52,23 +56,22 @@ void printwords(char *arraywords, char searchstring[]);
     scanf("%s",inputfilename);
 
     FILE *fp1; // Input file
+
 //if the file doesn’t exist:
     while((fp1 = fopen(inputfilename, "r")) == NULL){
         fprintf(stderr,"Error opening the file, please try again: ");
         scanf("%s",inputfilename);
     }
-
- //       printf("OK %s",inputfilename);
         return fp1;
 
 }
 
     char **read_strings(FILE* inputFile, int* count){
-    char** array = NULL;        /* Array of lines */
+    char** array = NULL;        /* Array of words */
     int    i;                   /* Loop counter */
-    char   word[100];           /* Buffer to read each line */
-    int    word_count;          /* Total number of lines */
-    int    word_length;         /* Length of a single line */
+    char   word[100];           /* Buffer to read each word */
+    int    word_count;          /* Total number of words */
+    int    word_length;         /* Length of a single word */
 
     /* Clear output parameter. */
     *count = 0;
@@ -76,24 +79,22 @@ void printwords(char *arraywords, char searchstring[]);
     /* Get the count of lines in the file */
     word_count = wordsnumber(inputFile);
 
-
     /* Move to the beginning of file. */
     rewind(inputFile);
 
-    /* Allocate an array of pointers to strings
-     * (one item per line). */
+    // Allocate an array of pointers to strings
+
     array = malloc(word_count * sizeof(char *));
     if (array == NULL) {
         return NULL; /* Error */
     }
 
-    /* Read each line from file and deep-copy in the array. */
+    /* Read each word from file and copy in the array. */
     for (i = 0; i < word_count; i++) {
-        /* Read the current line. */
-      //  fgets(line, sizeof(line), inputFile);
+        /* Read the current word. */
         fscanf(inputFile,"%s",word);
 
-        /* Allocate space to store a copy of the line. +1 for NUL terminator */
+        /* Allocate space to store a copy of the word. +1 for NULL terminator */
         array[i] = malloc((size_t) (word_length + 1));
 
         /* Copy the line into the newly allocated space. */
@@ -103,7 +104,7 @@ void printwords(char *arraywords, char searchstring[]);
     /* Write output param */
     *count = word_count;
 
-    /* Return the array of lines */
+    /* Return the array of words */
     return array;
 
 }
@@ -111,20 +112,19 @@ void printwords(char *arraywords, char searchstring[]);
     int wordsnumber(FILE* inputFile){
 
         int wordCount=0;
-   //     int ch;
-        char word;
+        char word[BUFSIZ];
         while((fscanf(inputFile,"%s",word))!=EOF) {
 
                 ++wordCount;
 
     }
-        printf("word count: %d", wordCount);
+        printf("word count: %d\n\n", wordCount);
         return wordCount;
 }
 
 void printwords(char *arraywords, char searchstring[]){
 
     if( strlen(arraywords)>1 && !strcmp(arraywords+strlen(arraywords)-2,"ed") )
-        printf("found: %s\n",arraywords);
+        printf("%s\n",arraywords);
 
 }
