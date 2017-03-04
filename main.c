@@ -123,8 +123,8 @@ void printwords(char *arraywords, char searchstring[]);
 }
 
 void printwords(char *arraywords, char searchstring[]){
- //   printf("arayword %s",arraywords);
- //   if( strlen(arraywords)>2 && !strcmp(arraywords+strlen(arraywords)-2,"ed") )
-    if(strstr(arraywords, "ed"))
+
+    if( strlen(arraywords)>1 && !strcmp(arraywords+strlen(arraywords)-2,"ed") )
         printf("found: %s\n",arraywords);
+
 }
